@@ -9,6 +9,7 @@ import numpy as np
 import numpy.typing as npt
 
 from limen.routes import RouteLibrary, RouteSpec
+from limen.trace import stable_hash
 
 RAW_TRANSCRIPT_FORMAT = "raw_role_content_v1"
 
@@ -331,6 +332,7 @@ class TranscriptVectorRouter:
             {
                 "message_count": len(messages),
                 "transcript_format": RAW_TRANSCRIPT_FORMAT,
+                "transcript_hash": stable_hash(transcript),
             }
         )
         return replace(

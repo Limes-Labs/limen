@@ -6,6 +6,7 @@ import sys
 from collections.abc import Sequence
 from pathlib import Path
 
+from limen.artifacts import LinearHeadArtifact
 from limen.eval import evaluate_routes, load_route_eval_cases
 from limen.routers import MetadataRouter
 from limen.routes import RouteLibrary
@@ -15,6 +16,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = list(sys.argv[1:] if argv is None else argv)
     if args and args[0] == "eval":
         return _eval_command(args[1:])
+    if args and args[0] == "artifact":
+        return _artifact_command(args[1:])
     return _route_command(args)
 
 
@@ -58,3 +61,32 @@ def _eval_command(argv: Sequence[str] | None = None) -> int:
         )
     )
     return 0
+
+
+def _artifact_command(argv: Sequence[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Inspect Limen artifacts.")
+    subparsers = parser.add_subparsers(dest="command", required=True)
+    inspect = subparsers.add_parser("inspect", help="Inspect a linear-head artifact.")
+    inspect.add_argument("path", type=Path)
+    args = parser.parse_args(argv)
+
+    if args.command == "inspect":
+        artifact = LinearHeadArtifact.load(args.path)
+        print(
+            json.dumps(
+                {
+                    "type": "linear_head",
+                    "schema_version": artifact.schema_version,
+                    "weights_shape": list(artifact.weights.shape),
+                    "num_agents": artifact.num_agents,
+                    "role_names": list(artifact.role_names),
+                    "metadata": artifact.metadata,
+                },
+                indent=2,
+                ensure_ascii=False,
+            )
+        )
+        return 0
+
+    parser.error(f"unknown artifact command: {args.command}")
+    return 2

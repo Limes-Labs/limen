@@ -16,6 +16,8 @@ generation remains inside frozen external models or local adapters.
   experiments.
 - A raw transcript bridge for SLM-style routers: `role: content` messages enter
   an injected vector extractor, then route through the linear head.
+- Versioned linear-head artifacts for saving and loading learned router
+  weights with metadata.
 - A Thinker / Worker / Verifier orchestration loop.
 - A Conductor-style workflow DAG executor with explicit access lists.
 - Provider adapters, including deterministic mock providers and an
@@ -74,6 +76,12 @@ limen eval --library-dir examples/routes --cases examples/route_eval.jsonl
 The eval report includes total accuracy, misses, a confusion matrix, and
 per-route accuracy. That makes route changes easier to review before replacing a
 baseline router with a learned policy.
+
+Inspect a saved linear-head artifact:
+
+```bash
+limen artifact inspect artifacts/router-head.npz
+```
 
 Run checks:
 
@@ -136,6 +144,13 @@ Limen is inspired by, and cites, these sources:
   https://di-zhang-llm.github.io/blog/how-fugu-is-implemented-a-technical-inspect/
 
 See [docs/sources.md](docs/sources.md) for the detailed attribution map.
+
+Additional documentation:
+
+- [Architecture](docs/architecture.md)
+- [Head artifacts](docs/head-artifacts.md)
+- [Route libraries](docs/route-library.md)
+- [Roadmap](docs/roadmap.md)
 
 ## License
 

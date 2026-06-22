@@ -2,6 +2,7 @@ import numpy as np
 import pytest
 
 from limen.routers import LinearHeadRouter, TranscriptVectorRouter, format_raw_transcript
+from limen.trace import stable_hash
 
 
 def test_linear_head_routes_agent_and_role_from_hidden_vector() -> None:
@@ -95,4 +96,5 @@ def test_transcript_vector_router_routes_messages_through_extractor() -> None:
     assert decision.diagnostics == {
         "message_count": 1,
         "transcript_format": "raw_role_content_v1",
+        "transcript_hash": stable_hash("user: Check this proof.\n"),
     }

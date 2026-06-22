@@ -2,7 +2,11 @@ import json
 import sys
 from pathlib import Path
 
+import numpy as np
+
+from limen.artifacts import LinearHeadArtifact
 from limen.cli import main
+from limen.routers import LinearHeadRouter
 
 
 def write_route(root: Path, name: str, body: str) -> None:
@@ -130,3 +134,28 @@ def test_cli_entrypoint_reads_sys_argv_for_eval(tmp_path: Path, capsys, monkeypa
 
     output = json.loads(capsys.readouterr().out)
     assert output["accuracy"] == 1.0
+
+
+def test_cli_artifact_inspect_reports_linear_head_manifest(tmp_path: Path, capsys) -> None:
+    router = LinearHeadRouter(
+        np.ones((3, 2), dtype=np.float32),
+        num_agents=2,
+        role_names=("Verifier",),
+    )
+    path = tmp_path / "head.npz"
+    LinearHeadArtifact.from_router(
+        router,
+        metadata={"transcript_format": "raw_role_content_v1"},
+    ).save(path)
+
+    assert main(["artifact", "inspect", str(path)]) == 0
+
+    output = json.loads(capsys.readouterr().out)
+    assert output == {
+        "type": "linear_head",
+        "schema_version": 1,
+        "weights_shape": [3, 2],
+        "num_agents": 2,
+        "role_names": ["Verifier"],
+        "metadata": {"transcript_format": "raw_role_content_v1"},
+    }

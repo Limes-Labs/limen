@@ -6,6 +6,7 @@
 - Metadata guardrail router.
 - Linear hidden-vector router.
 - Raw transcript vector-router bridge.
+- Versioned linear-head artifact persistence.
 - Thinker / Worker / Verifier loop.
 - Workflow DAG executor.
 - Provider boundary with mock and OpenAI-compatible adapters.

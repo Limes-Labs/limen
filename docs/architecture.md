@@ -23,7 +23,13 @@ rows select the worker. Optional trailing rows select a role.
 `role: content` lines, calls an injected hidden-vector extractor, then delegates
 to `LinearHeadRouter`. The extractor is deliberately external so applications
 can use a local small language model, a cached embedding service, or a test
-double without binding Limen to a specific inference stack.
+double without binding Limen to a specific inference stack. Diagnostics include
+the transcript format and a transcript hash, not the raw transcript text.
+
+`LinearHeadArtifact` stores the learned routing head as a compressed `.npz`
+file with a versioned JSON manifest. The artifact records `num_agents`,
+`role_names`, and user metadata next to the matrix, so trained heads can be
+reviewed, moved between services, and loaded without hidden process state.
 
 `ScriptedRouter` exists for tests and demos.
 

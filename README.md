@@ -20,8 +20,8 @@ generation remains inside frozen external models or local adapters.
   weights with metadata.
 - A Thinker / Worker / Verifier orchestration loop.
 - A Conductor-style workflow DAG executor with explicit access lists.
-- Provider adapters, including deterministic mock providers and an
-  OpenAI-compatible chat-completions adapter.
+- Provider adapters, including an OpenAI-compatible chat-completions adapter.
+- Token usage, estimated cost accounting, and run-level cost budgets.
 - Redacted JSONL tracing with content hashes instead of raw private prompts.
 - A small eval harness for route fixture accuracy.
 - SVF utilities for singular-value adaptation experiments.
@@ -123,6 +123,8 @@ user request
 - Verifier output must explicitly start with `ACCEPT` or `REVISE`.
 - Provider credentials are passed at the application boundary, not read from
   process environment inside reusable library code.
+- Provider pools, selected models, token usage, and estimated costs should be
+  explicit in code and traceable in results.
 - Traces should be useful without leaking prompt content or secrets.
 - Model weights and LoRA checkpoints stay outside the repository.
 
@@ -149,6 +151,7 @@ Additional documentation:
 
 - [Architecture](docs/architecture.md)
 - [Head artifacts](docs/head-artifacts.md)
+- [Provider accounting](docs/provider-accounting.md)
 - [Route libraries](docs/route-library.md)
 - [Roadmap](docs/roadmap.md)
 

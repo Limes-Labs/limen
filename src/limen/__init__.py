@@ -2,7 +2,15 @@
 
 from limen.artifacts import LinearHeadArtifact
 from limen.orchestrator import OrchestrationError, OrchestrationResult, Orchestrator
-from limen.providers import MockProvider, OpenAICompatibleProvider, ProviderPool, ProviderSpec
+from limen.providers import (
+    MockProvider,
+    OpenAICompatibleProvider,
+    ProviderCompletion,
+    ProviderPool,
+    ProviderResponse,
+    ProviderSpec,
+    TokenUsage,
+)
 from limen.routers import (
     LinearHeadRouter,
     MetadataRouter,
@@ -22,12 +30,15 @@ __all__ = [
     "OrchestrationError",
     "OrchestrationResult",
     "Orchestrator",
+    "ProviderCompletion",
     "ProviderPool",
+    "ProviderResponse",
     "ProviderSpec",
     "RouteDecision",
     "RouteLibrary",
     "RouteSpec",
     "SVFDecomposition",
+    "TokenUsage",
     "TranscriptVectorRouter",
     "format_raw_transcript",
 ]

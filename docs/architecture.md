@@ -60,11 +60,19 @@ Unknown verifier text is treated as revision for loop control.
 The provider pool maps `agent_id` to `ProviderSpec`, then dispatches through an
 adapter. The default repository includes:
 
-- `MockProvider` for deterministic local tests.
 - `OpenAICompatibleProvider` for chat-completions-compatible endpoints.
+- `MockProvider` for deterministic local tests only.
 
 Applications can add their own adapters for Anthropic, Gemini, local inference
 servers, SGLang, vLLM, or internal services.
+
+`ProviderSpec` records the concrete provider, model name, and optional input and
+output token prices. When a provider returns token usage, `ProviderPool`
+attaches usage and estimated cost to `ProviderResponse`. `Orchestrator` sums
+those fields into `OrchestrationResult`, writes them to trace events, and can
+stop a run with `cost_budget_exceeded` when `max_estimated_cost_usd` is reached.
+This makes model choice and test-time compute visible instead of burying it
+inside an opaque routing layer.
 
 ## Tracing
 

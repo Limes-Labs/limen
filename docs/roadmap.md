@@ -10,6 +10,7 @@
 - Thinker / Worker / Verifier loop.
 - Workflow DAG executor.
 - Provider boundary with mock and OpenAI-compatible adapters.
+- Provider token usage, estimated cost accounting, and cost budgets.
 - Redacted JSONL traces.
 - SVF experiment utility.
 - Route eval harness.

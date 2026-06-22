@@ -69,6 +69,10 @@ Evaluate a route fixture file:
 limen eval --library-dir examples/routes --cases examples/route_eval.jsonl
 ```
 
+The eval report includes total accuracy, misses, a confusion matrix, and
+per-route accuracy. That makes route changes easier to review before replacing a
+baseline router with a learned policy.
+
 Run checks:
 
 ```bash

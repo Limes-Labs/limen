@@ -52,12 +52,7 @@ def _eval_command(argv: Sequence[str] | None = None) -> int:
     result = evaluate_routes(router, load_route_eval_cases(args.cases))
     print(
         json.dumps(
-            {
-                "total": result.total,
-                "correct": result.correct,
-                "accuracy": result.accuracy,
-                "misses": result.misses,
-            },
+            result.to_jsonable(),
             indent=2,
             ensure_ascii=False,
         )

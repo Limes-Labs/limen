@@ -21,6 +21,18 @@ rows select the worker. Optional trailing rows select a role.
 
 `ScriptedRouter` exists for tests and demos.
 
+## Evaluation
+
+The route eval harness reads JSONL fixtures with `id`, `prompt`, and
+`expected_route_id`. Reports include:
+
+- total examples;
+- correct examples;
+- scalar accuracy;
+- misses with expected and actual routes;
+- confusion matrix grouped by expected route;
+- per-route total, correct count, and accuracy.
+
 ## Roles
 
 The runtime supports three canonical roles:
@@ -65,4 +77,3 @@ prevents accidental all-to-all context sharing.
 `SVFDecomposition` supports singular-value adaptation experiments. It freezes
 singular vectors, applies per-singular-value offsets, and normalizes the sum of
 singular values during reconstruction.
-

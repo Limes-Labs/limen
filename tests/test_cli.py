@@ -89,7 +89,17 @@ def test_cli_eval_reports_accuracy_and_misses(tmp_path: Path, capsys) -> None:
     assert main(["eval", "--library-dir", str(tmp_path), "--cases", str(cases)]) == 0
 
     output = json.loads(capsys.readouterr().out)
-    assert output == {"total": 2, "correct": 2, "accuracy": 1.0, "misses": []}
+    assert output == {
+        "total": 2,
+        "correct": 2,
+        "accuracy": 1.0,
+        "misses": [],
+        "confusion_matrix": {"L0": {"L0": 1}, "code": {"code": 1}},
+        "per_route": {
+            "L0": {"total": 1, "correct": 1, "accuracy": 1.0},
+            "code": {"total": 1, "correct": 1, "accuracy": 1.0},
+        },
+    }
 
 
 def test_cli_entrypoint_reads_sys_argv_for_eval(tmp_path: Path, capsys, monkeypatch) -> None:

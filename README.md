@@ -8,9 +8,6 @@ the open. It treats model choice as a policy layer: a small router decides which
 worker, role, adapter, or workflow should handle a request, while the expensive
 generation remains inside frozen external models or local adapters.
 
-The name means "threshold": Limen sits at the boundary between a user request
-and the model or workflow best suited to cross it.
-
 ## What This Is
 
 - A transparent route-library format for model and LoRA routing.
@@ -24,6 +21,20 @@ and the model or workflow best suited to cross it.
 - Redacted JSONL tracing with content hashes instead of raw private prompts.
 - A small eval harness for route fixture accuracy.
 - SVF utilities for singular-value adaptation experiments.
+
+## Why Limen
+
+`Limen` is Latin for "threshold." That meaning fits the project because the
+router is not the final model and not the final answer. It is the decision
+threshold a request crosses before it enters the right execution path: a cheap
+worker, a stronger frontier model, a specialist LoRA, a Thinker / Worker /
+Verifier loop, or a Conductor-style workflow.
+
+The name also captures the main technical bet behind Fugu-like systems: the
+valuable layer is often the boundary policy, not another monolithic model. A
+well-trained or well-governed threshold can decide when to stay with the entry
+route, when to call a specialist, when to ask for verification, and when to
+compose several workers into a workflow.
 
 ## What This Is Not
 
@@ -50,6 +61,12 @@ Expected shape:
   "target": "coding-worker",
   "reason": "specialist_signal"
 }
+```
+
+Evaluate a route fixture file:
+
+```bash
+limen eval --library-dir examples/routes --cases examples/route_eval.jsonl
 ```
 
 Run checks:

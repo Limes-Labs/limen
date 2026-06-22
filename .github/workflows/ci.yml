@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Set up Python
+        run: uv python install 3.11
+      - name: Install
+        run: uv pip install --python 3.11 -e ".[dev]"
+      - name: Lint
+        run: uv run --python 3.11 ruff check .
+      - name: Typecheck
+        run: uv run --python 3.11 mypy
+      - name: Test
+        run: uv run --python 3.11 pytest
+

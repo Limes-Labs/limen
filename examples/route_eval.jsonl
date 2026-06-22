@@ -1,0 +1,5 @@
+{"id":"code-1","prompt":"Fix a failing pytest and run verification.","expected_route_id":"code"}
+{"id":"research-1","prompt":"Compare the TRINITY and Conductor papers with citations.","expected_route_id":"research"}
+{"id":"general-1","prompt":"Explain model routing in one paragraph.","expected_route_id":"L0"}
+{"id":"lora-1","prompt":"Choose a LoRA adapter for this request.","expected_route_id":"lora"}
+

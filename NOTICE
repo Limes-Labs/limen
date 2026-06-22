@@ -1,0 +1,7 @@
+Limen
+Copyright 2026 Limes Labs
+
+This project implements original Limes Labs code inspired by public research
+and open-source orchestration projects. It does not include proprietary Sakana
+Fugu model weights, checkpoints, provider credentials, traces, or private data.
+

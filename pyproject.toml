@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "limen"
+version = "0.1.0"
+description = "Open orchestration primitives for routing tasks across models, roles, workflows, and LoRA adapters."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+authors = [{ name = "Limes Labs" }]
+keywords = ["llm", "orchestration", "routing", "agents", "lora", "mixture-of-experts"]
+dependencies = ["numpy>=2.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.8", "mypy>=1.14"]
+
+[project.scripts]
+limen = "limen.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/limen"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+packages = ["limen"]
+

@@ -14,12 +14,13 @@ jobs:
       - uses: astral-sh/setup-uv@v5
       - name: Set up Python
         run: uv python install 3.11
+      - name: Create virtual environment
+        run: uv venv --python 3.11
       - name: Install
-        run: uv pip install --python 3.11 -e ".[dev]"
+        run: uv pip install -e ".[dev]"
       - name: Lint
-        run: uv run --python 3.11 ruff check .
+        run: .venv/bin/python -m ruff check .
       - name: Typecheck
-        run: uv run --python 3.11 mypy
+        run: .venv/bin/python -m mypy
       - name: Test
-        run: uv run --python 3.11 pytest
-
+        run: .venv/bin/python -m pytest

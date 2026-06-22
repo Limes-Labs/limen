@@ -2,7 +2,13 @@
 
 from limen.orchestrator import OrchestrationError, OrchestrationResult, Orchestrator
 from limen.providers import MockProvider, OpenAICompatibleProvider, ProviderPool, ProviderSpec
-from limen.routers import LinearHeadRouter, MetadataRouter, RouteDecision
+from limen.routers import (
+    LinearHeadRouter,
+    MetadataRouter,
+    RouteDecision,
+    TranscriptVectorRouter,
+    format_raw_transcript,
+)
 from limen.routes import RouteLibrary, RouteSpec
 from limen.svf import SVFDecomposition
 
@@ -20,4 +26,6 @@ __all__ = [
     "RouteLibrary",
     "RouteSpec",
     "SVFDecomposition",
+    "TranscriptVectorRouter",
+    "format_raw_transcript",
 ]

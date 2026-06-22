@@ -5,6 +5,7 @@
 - Route library parser.
 - Metadata guardrail router.
 - Linear hidden-vector router.
+- Raw transcript vector-router bridge.
 - Thinker / Worker / Verifier loop.
 - Workflow DAG executor.
 - Provider boundary with mock and OpenAI-compatible adapters.
@@ -14,7 +15,7 @@
 
 ## Next
 
-- Add optional local hidden-state extractors behind extras.
+- Add optional local SLM hidden-state extractors behind extras.
 - Add SGLang/vLLM adapter examples for LoRA route targets.
 - Add CMA-ES training scaffolding for small route heads.
 - Add OpenTelemetry trace export.
@@ -27,4 +28,3 @@
 - Claiming reproduction of Sakana Fugu or TRINITY benchmark scores without the
   original private setup.
 - Hiding provider selection behind opaque prompts without diagnostics.
-

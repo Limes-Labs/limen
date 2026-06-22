@@ -19,6 +19,12 @@ negative signals, then returns a route decision with diagnostics.
 computed hidden vector and applies a bias-free matrix multiplication. The first
 rows select the worker. Optional trailing rows select a role.
 
+`TranscriptVectorRouter` is the SLM-style bridge. It formats messages as raw
+`role: content` lines, calls an injected hidden-vector extractor, then delegates
+to `LinearHeadRouter`. The extractor is deliberately external so applications
+can use a local small language model, a cached embedding service, or a test
+double without binding Limen to a specific inference stack.
+
 `ScriptedRouter` exists for tests and demos.
 
 ## Evaluation

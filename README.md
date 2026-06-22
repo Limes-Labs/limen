@@ -14,6 +14,8 @@ generation remains inside frozen external models or local adapters.
 - A deterministic metadata router with guardrails and diagnostics.
 - A bias-free linear-head router over hidden vectors for TRINITY-style
   experiments.
+- A raw transcript bridge for SLM-style routers: `role: content` messages enter
+  an injected vector extractor, then route through the linear head.
 - A Thinker / Worker / Verifier orchestration loop.
 - A Conductor-style workflow DAG executor with explicit access lists.
 - Provider adapters, including deterministic mock providers and an
@@ -86,7 +88,7 @@ make typecheck
 ```text
 messages
   -> router
-     -> metadata route, linear head route, or scripted route
+     -> metadata route, transcript vector route, linear head route, or scripted route
   -> role injector
      -> Thinker, Worker, Verifier
   -> provider pool

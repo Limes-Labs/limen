@@ -72,9 +72,8 @@ router. It does not include LoRA weights, private datasets, or SGLang patches.
 
 Influence: the concise explanation that Fugu is a policy over models, not a new
 monolithic model; the breakdown of a small trainable surface, SVF offsets,
-linear selection head, raw transcript routing, verifier loop, and workflow DAG
-line.
+linear selection head, raw `role: content` transcript routing, verifier loop,
+and workflow DAG line.
 
 Implementation boundary: Limen treats this article as technical commentary and
 attributes it. It does not rely on unpublished artifacts.
-

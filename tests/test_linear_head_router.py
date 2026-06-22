@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from limen.routers import LinearHeadRouter
+from limen.routers import LinearHeadRouter, TranscriptVectorRouter, format_raw_transcript
 
 
 def test_linear_head_routes_agent_and_role_from_hidden_vector() -> None:
@@ -42,3 +42,57 @@ def test_linear_head_can_route_workers_without_roles() -> None:
 
     assert decision.agent_id == 0
     assert decision.role is None
+
+
+def test_format_raw_transcript_uses_role_content_lines() -> None:
+    transcript = format_raw_transcript(
+        [
+            {"role": "system", "content": "Route carefully."},
+            {"role": "user", "content": "Check this proof."},
+        ]
+    )
+
+    assert transcript == "system: Route carefully.\nuser: Check this proof.\n"
+
+
+def test_format_raw_transcript_rejects_invalid_messages() -> None:
+    with pytest.raises(ValueError, match="message 1 must include string role and content"):
+        format_raw_transcript(
+            [
+                {"role": "user", "content": "valid"},
+                {"role": "assistant"},
+            ]
+        )
+
+
+def test_transcript_vector_router_routes_messages_through_extractor() -> None:
+    transcripts: list[str] = []
+
+    def extractor(transcript: str) -> np.ndarray:
+        transcripts.append(transcript)
+        return np.array([0.0, 1.0], dtype=np.float32)
+
+    head = LinearHeadRouter(
+        np.array(
+            [
+                [0.0, 1.0],
+                [1.0, 0.0],
+                [0.0, 1.0],
+            ],
+            dtype=np.float32,
+        ),
+        num_agents=2,
+        role_names=("Verifier",),
+    )
+    router = TranscriptVectorRouter(head, extractor)
+
+    decision = router.route([{"role": "user", "content": "Check this proof."}])
+
+    assert transcripts == ["user: Check this proof.\n"]
+    assert decision.agent_id == 0
+    assert decision.role == "Verifier"
+    assert decision.reason == "transcript_vector_head"
+    assert decision.diagnostics == {
+        "message_count": 1,
+        "transcript_format": "raw_role_content_v1",
+    }

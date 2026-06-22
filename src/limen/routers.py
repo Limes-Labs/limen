@@ -1,14 +1,16 @@
 from __future__ import annotations
 
 import re
-from collections.abc import Iterable, Sequence
-from dataclasses import dataclass
+from collections.abc import Callable, Iterable, Sequence
+from dataclasses import dataclass, replace
 from typing import Any
 
 import numpy as np
 import numpy.typing as npt
 
 from limen.routes import RouteLibrary, RouteSpec
+
+RAW_TRANSCRIPT_FORMAT = "raw_role_content_v1"
 
 
 @dataclass(frozen=True)
@@ -291,6 +293,50 @@ class LinearHeadRouter:
             reason="linear_head",
             logits=[float(item) for item in logits.tolist()],
             margins=margins,
+        )
+
+
+def format_raw_transcript(messages: Sequence[dict[str, str]]) -> str:
+    """Render chat messages as the raw role/content transcript used by small routers."""
+
+    lines: list[str] = []
+    for index, message in enumerate(messages):
+        role = message.get("role")
+        content = message.get("content")
+        if not isinstance(role, str) or not isinstance(content, str):
+            raise ValueError(f"message {index} must include string role and content")
+        lines.append(f"{role}: {content}")
+    if not lines:
+        return ""
+    return "\n".join(lines) + "\n"
+
+
+class TranscriptVectorRouter:
+    """Route raw chat transcripts through an injected hidden-vector extractor."""
+
+    def __init__(
+        self,
+        head: LinearHeadRouter,
+        extractor: Callable[[str], npt.ArrayLike],
+    ) -> None:
+        self.head = head
+        self.extractor = extractor
+
+    def route(self, messages: list[dict[str, str]]) -> RouteDecision:
+        transcript = format_raw_transcript(messages)
+        vector = self.extractor(transcript)
+        decision = self.head.route_vector(vector)
+        diagnostics = dict(decision.diagnostics or {})
+        diagnostics.update(
+            {
+                "message_count": len(messages),
+                "transcript_format": RAW_TRANSCRIPT_FORMAT,
+            }
+        )
+        return replace(
+            decision,
+            reason="transcript_vector_head",
+            diagnostics=diagnostics,
         )
 
 

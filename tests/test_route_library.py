@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 from limen.routers import MetadataRouter
 from limen.routes import RouteLibrary
 
@@ -150,3 +152,45 @@ def test_model_route_is_accepted_only_when_metadata_has_no_stronger_specialist(
     assert guarded.route_id == "L2"
     assert guarded.raw_route == "L0"
     assert guarded.reason == "specialist_signal"
+
+
+def test_route_library_rejects_duplicate_route_ids(tmp_path: Path) -> None:
+    write_route(
+        tmp_path,
+        "L0",
+        """
+        ---
+        id: L0
+        target: general
+        ---
+        ## Description
+        Entry route.
+        """,
+    )
+    write_route(
+        tmp_path,
+        "code",
+        """
+        ---
+        id: specialist
+        target: coding-worker
+        ---
+        ## Description
+        Coding route.
+        """,
+    )
+    write_route(
+        tmp_path,
+        "research",
+        """
+        ---
+        id: specialist
+        target: research-worker
+        ---
+        ## Description
+        Research route.
+        """,
+    )
+
+    with pytest.raises(ValueError, match="duplicate route id 'specialist'"):
+        RouteLibrary.load(tmp_path)

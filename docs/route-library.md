@@ -33,6 +33,9 @@ Fix a failing pytest => code
 - `priority`: tie-breaker for deterministic routing.
 - `source_path`: optional local checkpoint path. Keep real weights out of git.
 
+Route ids must be unique across the library. Loading fails if two files declare
+the same `id`, because silent overwrites would make router evals misleading.
+
 ## Sections
 
 - `Description`: shown in router prompts and docs.
@@ -52,4 +55,3 @@ The metadata router is conservative:
 - ordinary chat or ambiguous work: route to entry;
 - invalid model-produced route: route to entry unless metadata has a stronger
   specialist match.
-

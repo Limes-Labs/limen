@@ -42,10 +42,7 @@ class RouteLibrary:
         if not path.exists():
             raise FileNotFoundError(f"Missing route library directory: {path}")
 
-        routes = {
-            route.id: route
-            for route in (parse_route_markdown(item) for item in sorted(path.glob("*.md")))
-        }
+        routes = _load_unique_routes(path)
         if not routes:
             raise FileNotFoundError(f"No .md route files found in: {path}")
         if entry_route_id not in routes:
@@ -91,6 +88,20 @@ def parse_route_markdown(path: Path) -> RouteSpec:
         source_path=meta.get("source_path", ""),
         library_path=str(path),
     )
+
+
+def _load_unique_routes(path: Path) -> dict[str, RouteSpec]:
+    routes: dict[str, RouteSpec] = {}
+    for item in sorted(path.glob("*.md")):
+        route = parse_route_markdown(item)
+        if route.id in routes:
+            existing = routes[route.id]
+            raise ValueError(
+                f"duplicate route id {route.id!r}: "
+                f"{existing.library_path} and {route.library_path}"
+            )
+        routes[route.id] = route
+    return routes
 
 
 def _split_front_matter(text: str) -> tuple[dict[str, str], str]:
